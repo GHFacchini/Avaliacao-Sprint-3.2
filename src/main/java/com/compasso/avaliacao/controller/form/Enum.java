@@ -11,10 +11,9 @@ import javax.validation.Payload;
 
 @Documented
 @Constraint(validatedBy = {EnumValueValidator.class})
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Enum
-{
+public @interface Enum {
     public abstract String message() default "Invalid value. This is not permitted.";
 
     public abstract Class<?>[] groups() default {};

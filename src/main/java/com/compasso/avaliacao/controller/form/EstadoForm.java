@@ -12,21 +12,27 @@ import java.math.BigDecimal;
 
 public class EstadoForm {
 
-    @NotEmpty @NotNull @Length(min = 4, max = 19)
+    @NotEmpty
+    @NotNull
+    @Length(min = 4, max = 19)
     private String nome;
-    @Enum(enumClass=Regiao.class, ignoreCase = true)
+    //tem alguns arquivos desorganizados na pasta pois estava bugando o import do @enum
+    @Enum(enumClass = Regiao.class, ignoreCase = true)
     private String regiao;
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     private Integer populacao;
-    @NotEmpty @NotNull
+    @NotEmpty
+    @NotNull
     private String capital;
-    @NotNull @DecimalMin("0")
+    @NotNull
+    @DecimalMin("0")
     private BigDecimal area;
 
-    public Estado converter(){
+    public Estado converter() {
         String regiaoUp = regiao.toUpperCase();
         Regiao regiaoFormatada = null;
-        switch(regiaoUp){
+        switch (regiaoUp) {
             case "NORTE":
                 regiaoFormatada = Regiao.NORTE;
                 break;
@@ -44,7 +50,8 @@ public class EstadoForm {
                 break;
         }
 
-        return new Estado(nome,regiaoFormatada,populacao,capital,area);}
+        return new Estado(nome, regiaoFormatada, populacao, capital, area);
+    }
 
     public String getNome() {
         return nome;

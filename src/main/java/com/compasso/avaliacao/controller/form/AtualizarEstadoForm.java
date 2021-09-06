@@ -16,13 +16,16 @@ public class AtualizarEstadoForm {
     @NotNull
     @Length(min = 4, max = 19)
     private String nome;
-    @Enum(enumClass= Regiao.class, ignoreCase = true)
+    @Enum(enumClass = Regiao.class, ignoreCase = true)
     private String regiao;
-    @NotNull @Min(0)
+    @NotNull
+    @Min(0)
     private Integer populacao;
-    @NotEmpty @NotNull
+    @NotEmpty
+    @NotNull
     private String capital;
-    @NotNull @DecimalMin("0")
+    @NotNull
+    @DecimalMin("0")
     private BigDecimal area;
 
     public String getNome() {

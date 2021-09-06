@@ -2,6 +2,7 @@ package com.compasso.avaliacao.controller.form;
 
 import com.compasso.avaliacao.controller.dto.EstadoDto;
 import com.compasso.avaliacao.modelo.Estado;
+import com.compasso.avaliacao.modelo.Regiao;
 import com.compasso.avaliacao.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,14 +25,46 @@ public class EstadosController {
     private EstadoRepository estadoRepository;
 
     @GetMapping
+    public Page<EstadoDto> lista(@RequestParam(required = false) String regiao,
+                                 @PageableDefault() Pageable paginacao) {
+        String regiaoUp = regiao.toUpperCase();
+        Regiao regiaoFormatada = null;
+        switch (regiaoUp) {
+            case "NORTE":
+                regiaoFormatada = Regiao.NORTE;
+                break;
+            case "NORDESTE":
+                regiaoFormatada = Regiao.NORDESTE;
+                break;
+            case "SUL":
+                regiaoFormatada = Regiao.SUL;
+                break;
+            case "SUDESTE":
+                regiaoFormatada = Regiao.SUDESTE;
+                break;
+            case "CENTRO-OESTE":
+                regiaoFormatada = Regiao.CENTRO_OESTE;
+                break;
+        }
+        if (regiao != null) {
+            Page<Estado> estados = estadoRepository.findByRegiao(regiaoFormatada, paginacao);
+            return EstadoDto.converter(estados);
+        } else {
+            Page<Estado> estados = estadoRepository.findAll(paginacao);
+            return EstadoDto.converter(estados);
+        }
+
+    }
+
+    /*@GetMapping
     public Page<EstadoDto> lista(@PageableDefault() Pageable paginacao){
         Page<Estado> estados = estadoRepository.findAll(paginacao);
         return EstadoDto.converter(estados);
-    }
+    }*/
     @GetMapping("/{id}")
-    public ResponseEntity<EstadoDto> mostrar(@PathVariable Long id){
+    public ResponseEntity<EstadoDto> mostrar(@PathVariable Long id) {
         Optional<Estado> estado = estadoRepository.findById(id);
-        if(estado.isPresent()){
+        if (estado.isPresent()) {
             return ResponseEntity.ok(new EstadoDto(estado.get()));
         }
 
@@ -40,7 +73,7 @@ public class EstadosController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<EstadoDto> cadastrar(@RequestBody @Valid EstadoForm estadoForm, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<EstadoDto> cadastrar(@RequestBody @Valid EstadoForm estadoForm, UriComponentsBuilder uriBuilder) {
         Estado estado = estadoForm.converter();
         estadoRepository.save(estado);
 
@@ -50,9 +83,9 @@ public class EstadosController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<EstadoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizarEstadoForm form){
+    public ResponseEntity<EstadoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizarEstadoForm form) {
         Optional<Estado> optional = estadoRepository.findById(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             Estado estado = form.atualizar(id, estadoRepository);
             return ResponseEntity.ok(new EstadoDto(estado));
         }
@@ -63,7 +96,7 @@ public class EstadosController {
     @Transactional
     public ResponseEntity<?> remover(@PathVariable Long id) {
         Optional<Estado> optional = estadoRepository.findById(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             estadoRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
