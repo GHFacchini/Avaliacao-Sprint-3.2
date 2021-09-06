@@ -18,7 +18,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/estados")
+@RequestMapping("/api/estados")
 public class EstadosController {
 
     @Autowired
@@ -78,7 +78,7 @@ public class EstadosController {
         Estado estado = estadoForm.converter();
         estadoRepository.save(estado);
 
-        URI uri = uriBuilder.path("/estados/{id}").buildAndExpand(estado.getId()).toUri();
+        URI uri = uriBuilder.path("/api/estados/{id}").buildAndExpand(estado.getId()).toUri();
         return ResponseEntity.created(uri).body(new EstadoDto(estado));
     }
 
