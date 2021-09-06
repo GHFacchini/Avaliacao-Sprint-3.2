@@ -2,6 +2,7 @@ package com.compasso.avaliacao.modelo;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Estado {
@@ -72,5 +73,19 @@ public class Estado {
 
     public void setArea(BigDecimal area) {
         this.area = area;
+    }
+
+    //não tenho certeza se esse equals e hashcode estão 100% corretos mas foi o criado automaticamente pelo Intellij
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Estado)) return false;
+        Estado estado = (Estado) o;
+        return id.equals(estado.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

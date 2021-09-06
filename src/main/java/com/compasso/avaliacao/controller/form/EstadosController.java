@@ -27,7 +27,13 @@ public class EstadosController {
     @GetMapping
     public Page<EstadoDto> lista(@RequestParam(required = false) String regiao,
                                  @PageableDefault() Pageable paginacao) {
-        String regiaoUp = regiao.toUpperCase();
+        String regiaoUp;
+        if(regiao != null){
+            regiaoUp = regiao.toUpperCase();
+        }else{
+            regiaoUp = "null";
+        }
+
         Regiao regiaoFormatada = null;
         switch (regiaoUp) {
             case "NORTE":
@@ -56,11 +62,6 @@ public class EstadosController {
 
     }
 
-    /*@GetMapping
-    public Page<EstadoDto> lista(@PageableDefault() Pageable paginacao){
-        Page<Estado> estados = estadoRepository.findAll(paginacao);
-        return EstadoDto.converter(estados);
-    }*/
     @GetMapping("/{id}")
     public ResponseEntity<EstadoDto> mostrar(@PathVariable Long id) {
         Optional<Estado> estado = estadoRepository.findById(id);
